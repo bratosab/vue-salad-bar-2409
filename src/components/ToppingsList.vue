@@ -12,6 +12,9 @@ function handleChooseTopping(topping: Topping) {
   const currentToppings: Topping[] = rawToppings ? JSON.parse(rawToppings) : []
 
   localStorage.setItem('topping-choices', JSON.stringify([...currentToppings, topping]))
+
+  const refreshChosenToppings = new Event('chosen-toppings')
+  document.dispatchEvent(refreshChosenToppings)
 }
 </script>
 
