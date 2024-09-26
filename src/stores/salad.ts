@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { Topping } from '../models/Topping.model'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { getToppings } from '../services/salad.service'
 
 export const useSaladStore = defineStore('salad', () => {
@@ -8,6 +8,13 @@ export const useSaladStore = defineStore('salad', () => {
   const chosenToppings = ref<Topping[]>([])
   const dressing = ref('')
   const loading = ref<boolean>(false)
+
+  const price = computed(() => {
+    console.log('computed')
+    return chosenToppings.value.reduce((total, topping) => {
+      return (total += topping.price)
+    }, 0)
+  })
 
   function setToppings(someToppings: Topping[]) {
     toppings.value = someToppings
@@ -33,6 +40,7 @@ export const useSaladStore = defineStore('salad', () => {
     chosenToppings,
     dressing,
     loading,
+    price,
     setToppings,
     chooseTopping,
     setDressing,
