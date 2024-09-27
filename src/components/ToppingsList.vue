@@ -19,7 +19,7 @@ function handleChooseTopping(topping: Topping) {
 </script>
 
 <template>
-  <ul>
+  <ul data-cy="topping-list">
     <li v-for="topping in toppings" :key="topping.id">
       {{ topping.name }} ({{ topping.price }} €)
       <button @click="handleChooseTopping(topping)">+1</button>

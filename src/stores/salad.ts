@@ -3,11 +3,25 @@ import type { Topping } from '../models/Topping.model'
 import { computed, ref } from 'vue'
 import { getToppings } from '../services/salad.service'
 
-export const useSaladStore = defineStore('salad', () => {
+const useToppingPrivateStore = defineStore('topping', () => {
   const toppings = ref<Topping[]>([])
+
+  function setToppings(someToppings: Topping[]) {
+    toppings.value = someToppings
+  }
+
+  return { toppings, setToppings }
+})
+
+export const useSaladStore = defineStore('salad', () => {
+  const toppingStore = useToppingPrivateStore()
+  const { setToppings } = toppingStore
+
   const chosenToppings = ref<Topping[]>([])
   const dressing = ref('')
   const loading = ref<boolean>(false)
+
+  const toppings = computed(() => toppingStore.toppings)
 
   const price = computed(() => {
     console.log('computed')
@@ -15,10 +29,6 @@ export const useSaladStore = defineStore('salad', () => {
       return (total += topping.price)
     }, 0)
   })
-
-  function setToppings(someToppings: Topping[]) {
-    toppings.value = someToppings
-  }
 
   function chooseTopping(aTopping: Topping) {
     chosenToppings.value.push(aTopping)
@@ -41,7 +51,6 @@ export const useSaladStore = defineStore('salad', () => {
     dressing,
     loading,
     price,
-    setToppings,
     chooseTopping,
     setDressing,
     loadToppings
